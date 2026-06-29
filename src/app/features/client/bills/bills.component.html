@@ -1,1 +1,55 @@
-<p>bills works!</p>
+<div class="bills-container">
+  <div class="page-header">
+    <h2>🧾 Mes Factures & Redevances</h2>
+    <p class="subtitle">Consultez vos factures d'eau, d'électricité ou d'abonnement et réglez-les instantanément.</p>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div class="main-card table-card">
+    <table class="custom-table" *ngIf="bills.length > 0; else emptyBills">
+      <thead>
+        <tr>
+          <th>Référence</th>
+          <th>Créancier</th>
+          <th>Date Limite</th>
+          <th>Statut</th>
+          <th class="text-right">Montant</th>
+          <th class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bill of bills">
+          <td class="font-bold">{{ bill.reference }}</td>
+          <td>{{ bill.provider || 'Service Public / Privé' }}</td>
+          <td>{{ bill.dueDate | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-paid': bill.status === 'PAID' || bill.status === 'paid',
+              'badge-unpaid': bill.status === 'PENDING' || bill.status === 'pending'
+            }">
+              {{ bill.status === 'PAID' || bill.status === 'paid' ? 'Payée' : 'En attente' }}
+            </span>
+          </td>
+          <td class="text-right font-bold">{{ bill.amount | xof }}</td>
+          <td class="text-center">
+            <button 
+              class="btn btn-action" 
+              [disabled]="bill.status === 'PAID' || bill.status === 'paid'"
+              (click)="onPayBill(bill)">
+              {{ bill.status === 'PAID' || bill.status === 'paid' ? 'Réglée' : 'Payer maintenant' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyBills>
+      <div class="empty-state-box">
+        <span class="empty-icon">🎉</span>
+        <p>Toutes vos factures sont payées. Vous êtes à jour !</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

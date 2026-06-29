@@ -9,7 +9,7 @@ import { Wallet, Transaction } from '../models/wallet.model';
 export class WalletApiService {
   private readonly BASE_URL = 'http://localhost:8080/api/wallets'; // [cite: 7, 174]
 
-  constructor(private http: HttpClient) {} // [cite: 175]
+  constructor(private http: HttpClient) { } // [cite: 175]
 
   // 1.1 Seeder la base de données
   seedDatabase(numWallets: number, eventsPerWallet: number): Observable<string> {
@@ -64,5 +64,14 @@ export class WalletApiService {
   // 1.11 Consulter l'historique des transactions par téléphone
   getTransactionHistory(phone: string): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(`${this.BASE_URL}/${phone}/transactions`); // [cite: 73]
+  }
+
+  // Factures / redevances du client
+  getBillsByPhone(phone: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.BASE_URL}/${phone}/bills`);
+  }
+
+  payBill(billId: number, phone: string): Observable<any> {
+    return this.http.post<any>(`${this.BASE_URL}/${phone}/bills/${billId}/pay`, {});
   }
 }

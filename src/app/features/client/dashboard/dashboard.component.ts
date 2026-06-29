@@ -15,6 +15,10 @@ export class DashboardComponent implements OnInit {
   constructor(public balanceStore: BalanceStoreService) {}
 
   ngOnInit(): void {
+    // 1. On définit un numéro client par défaut pour alimenter les requêtes API
+    this.balanceStore.setCurrentPhone('+221771234567'); // Modifie par un numéro réel de ton API si besoin
+    
+    // 2. On rafraîchit le solde global
     this.balanceStore.refreshBalance();
   }
 }

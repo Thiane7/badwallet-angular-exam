@@ -1,33 +1,23 @@
 import { Routes } from '@angular/router';
+import { DashboardComponent } from './features/client/dashboard/dashboard.component';
+import { TransferComponent } from './features/client/transfer/transfer.component';
+import { TransactionsComponent } from './features/client/transactions/transactions.component';
+import { BillsComponent } from './features/client/bills/bills.component';
+import { WalletsManagementComponent } from './features/agent/wallets-management/wallets-management.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
-  },
-  {
-    path: 'dashboard',
-    loadComponent: () => import('./features/client/dashboard/dashboard.component').then(m => m.DashboardComponent)
-  },
-  {
-    path: 'transfer',
-    loadComponent: () => import('./features/client/transfer/transfer.component').then(m => m.TransferComponent)
-  },
-  {
-    path: 'bills/current',
-    loadComponent: () => import('./features/client/bills/bills.component').then(m => m.BillsComponent)
-  },
-  {
-    path: 'transactions',
-    loadComponent: () => import('./features/client/transactions/transactions.component').then(m => m.TransactionsComponent)
-  },
-  {
-    path: 'admin/wallets',
-    loadComponent: () => import('./features/agent/wallets-management/wallets-management.component').then(m => m.WalletsManagementComponent)
-  },
-  {
-    path: '**',
-    redirectTo: 'dashboard'
-  }
+  // Redirection par défaut vers le Dashboard Client
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  
+  // Espace Client
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'transfer', component: TransferComponent },
+  { path: 'transactions', component: TransactionsComponent },
+  { path: 'bills/current', component: BillsComponent }, // C'est l'URL appelée par ton bouton !
+
+  // Espace Agent / Admin
+  { path: 'admin/wallets', component: WalletsManagementComponent },
+
+  // Redirection de secours si l'URL n'existe pas
+  { path: '**', redirectTo: 'dashboard' }
 ];
