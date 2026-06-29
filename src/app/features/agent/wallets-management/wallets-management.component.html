@@ -1,0 +1,106 @@
+<div class="agent-dashboard">
+  <h2>💼 Espace Gestion de Guichet</h2>
+
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div class="dashboard-grid">
+    <div class="main-card table-section">
+      <h3>Portefeuilles Enregistrés</h3>
+      
+      <div class="search-bar">
+        <input type="text" [(ngModel)]="searchPhone" placeholder="Rechercher par téléphone (ex: +22177...)" class="form-control">
+        <button (click)="onSearch()" class="btn btn-primary">🔍 Rechercher</button>
+      </div>
+
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Téléphone</th>
+            <th>Email</th>
+            <th>Solde</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let w of wallets">
+            <td><strong>{{ w.code }}</strong></td>
+            <td>{{ w.phoneNumber }}</td>
+            <td>{{ w.email }}</td>
+            <td class="txt-green">{{ w.balance | xof }}</td>
+            <td>
+              <button (click)="openTransactionModal(w)" class="btn btn-action">🔄 Dépôt / Retrait</button>
+            </td>
+          </tr>
+          <tr *ngIf="wallets.length === 0">
+            <td colspan="5" class="txt-center">Aucun portefeuille disponible.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button [disabled]="currentPage === 0" (click)="changePage(currentPage - 1)">Précédent</button>
+        <span>Page {{ currentPage + 1 }} sur {{ totalPages }}</span>
+        <button [disabled]="currentPage >= totalPages - 1" (click)="changePage(currentPage + 1)">Suivant</button>
+      </div>
+    </div>
+
+    <div class="main-card form-section">
+      <h3>Créer un Portefeuille</h3>
+      <form [formGroup]="walletForm" (ngSubmit)="onCreateWallet()">
+        <div class="form-group">
+          <label>Numéro de téléphone</label>
+          <input type="text" formControlName="phoneNumber" placeholder="+221770000000" class="form-control">
+          <small class="error-text" *ngIf="walletForm.get('phoneNumber')?.touched && walletForm.get('phoneNumber')?.invalid">
+            Format requis : +221 suivi de 9 chiffres (77, 78, 76, 70, 75).
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Adresse Email</label>
+          <input type="email" formControlName="email" placeholder="client@gmail.com" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Code Portefeuille unique</label>
+          <input type="text" formControlName="code" placeholder="WLT-XXXXX" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Solde Initial</label>
+          <input type="number" formControlName="balance" class="form-control">
+        </div>
+
+        <button type="submit" [disabled]="walletForm.invalid" class="btn btn-success btn-block">➕ Enregistrer le Client</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="selectedWalletForTransaction">
+    <div class="modal-card">
+      <h3>Transaction sur {{ selectedWalletForTransaction.phoneNumber }}</h3>
+      <p>Code : {{ selectedWalletForTransaction.code }} | Actuel : <strong class="txt-green">{{ selectedWalletForTransaction.balance | xof }}</strong></p>
+      
+      <form [formGroup]="transactionForm" (ngSubmit)="onExecuteTransaction()">
+        <div class="form-group">
+          <label>Type d'opération</label>
+          <select formControlName="type" class="form-control">
+            <option value="deposit">📥 Dépôt d'argent</option>
+            <option value="withdraw">📤 Retrait d'argent</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Montant (XOF)</label>
+          <input type="number" formControlName="amount" placeholder="Minimum 100 XOF" class="form-control">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" (click)="selectedWalletForTransaction = null" class="btn btn-secondary">Annuler</button>
+          <button type="submit" [disabled]="transactionForm.invalid" class="btn btn-primary">Valider l'opération</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
