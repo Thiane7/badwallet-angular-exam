@@ -1,0 +1,4 @@
+.main-header { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border-bottom: 1px solid #f1f5f9; }
+.logo-text { font-size: 1.4rem; font-weight: 800; color: #0f172a; }
+.highlight { color: #0284c7; }
+.status-indicator { font-size: 0.85rem; color: #22c55e; font-weight: 600; }

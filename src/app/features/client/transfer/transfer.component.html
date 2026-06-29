@@ -1,1 +1,34 @@
-<p>transfer works!</p>
+<div class="transfer-container">
+  <div class="main-card form-card">
+    <h2>💸 Envoyer de l'argent</h2>
+    <p class="subtitle">Effectuez des virements instantanés et sécurisés vers un autre portefeuille BadWallet.</p>
+
+    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+    <form [formGroup]="transferForm" (ngSubmit)="onTransfer()">
+      <div class="form-group">
+        <label>Numéro de l'expéditeur (Mon compte)</label>
+        <input type="text" formControlName="senderPhone" readonly class="form-control readonly-input">
+      </div>
+
+      <div class="form-group">
+        <label>Numéro du destinataire</label>
+        <input type="text" formControlName="receiverPhone" placeholder="+22177XXXXXXX" class="form-control">
+        <small class="error-text" *ngIf="transferForm.get('receiverPhone')?.touched && transferForm.get('receiverPhone')?.invalid">
+          Un numéro sénégalais valide (+221 suivi de 9 chiffres) est obligatoire.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Montant à transférer (XOF)</label>
+        <input type="number" formControlName="amount" placeholder="Entrez le montant" class="form-control">
+        <small class="error-text" *ngIf="transferForm.get('amount')?.touched && transferForm.get('amount')?.invalid">
+          Le montant doit être supérieur à 0 XOF.
+        </small>
+      </div>
+
+      <button type="submit" [disabled]="transferForm.invalid" class="btn btn-primary btn-block">Confirmer le transfert</button>
+    </form>
+  </div>
+</div>

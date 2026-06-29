@@ -1,1 +1,36 @@
-<p>dashboard works!</p>
+<div class="client-dashboard">
+  <div class="welcome-banner">
+    <h2>Bonjour, {{ balanceStore.currentPhone() }} 👋</h2>
+    <p>Bienvenue sur votre espace personnel BadWallet. Gérez vos finances en toute simplicité.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card balance">
+      <span class="card-label">Solde Disponible</span>
+      <h3>{{ balanceStore.balance() | xof }}</h3>
+    </div>
+    <div class="stat-card info">
+      <span class="card-label">Devise</span>
+      <h3>Franc CFA (XOF)</h3>
+    </div>
+  </div>
+
+  <h3 class="section-title">Opérations rapides</h3>
+  <div class="actions-grid">
+    <a routerLink="/transfer" class="action-card">
+      <span class="action-icon">💸</span>
+      <h4>Envoyer de l'argent</h4>
+      <p>Transférez des fonds instantanément vers un autre compte.</p>
+    </a>
+    <a routerLink="/bills/current" class="action-card">
+      <span class="action-icon">🧾</span>
+      <h4>Factures du mois</h4>
+      <p>Consultez et réglez vos redevances en attente.</p>
+    </a>
+    <a routerLink="/transactions" class="action-card">
+      <span class="action-icon">🕒</span>
+      <h4>Historique</h4>
+      <p>Suivez en détail vos derniers mouvements de fonds.</p>
+    </a>
+  </div>
+</div>
